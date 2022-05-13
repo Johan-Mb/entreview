@@ -30,6 +30,14 @@ class Artist
     #[ORM\ManyToMany(targetEntity: Place::class, inversedBy: 'artists')]
     private $Place;
 
+    #[ORM\ManyToMany(targetEntity: Interview::class, mappedBy: 'artist_id')]
+    private $interviews;
+
+    public function __construct()
+    {
+        $this->interviews = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +111,33 @@ class Artist
     public function removePlace(Place $place): self
     {
         $this->Place->removeElement($place);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Interview>
+     */
+    public function getInterviews(): Collection
+    {
+        return $this->interviews;
+    }
+
+    public function addInterview(Interview $interview): self
+    {
+        if (!$this->interviews->contains($interview)) {
+            $this->interviews[] = $interview;
+            $interview->addArtistId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInterview(Interview $interview): self
+    {
+        if ($this->interviews->removeElement($interview)) {
+            $interview->removeArtistId($this);
+        }
 
         return $this;
     }

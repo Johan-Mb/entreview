@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InterviewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: InterviewRepository::class)]
@@ -27,6 +29,18 @@ class Interview
 
     #[ORM\Column(type: 'string', length: 255)]
     private $status;
+
+    #[ORM\ManyToMany(targetEntity: Artist::class, inversedBy: 'interviews')]
+    private $artist_id;
+
+    #[ORM\ManyToMany(targetEntity: Place::class, inversedBy: 'interviews')]
+    private $place_id;
+
+    public function __construct()
+    {
+        $this->artist_id = new ArrayCollection();
+        $this->place_id = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -89,6 +103,54 @@ class Interview
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Artist>
+     */
+    public function getArtistId(): Collection
+    {
+        return $this->artist_id;
+    }
+
+    public function addArtistId(Artist $artistId): self
+    {
+        if (!$this->artist_id->contains($artistId)) {
+            $this->artist_id[] = $artistId;
+        }
+
+        return $this;
+    }
+
+    public function removeArtistId(Artist $artistId): self
+    {
+        $this->artist_id->removeElement($artistId);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Place>
+     */
+    public function getPlaceId(): Collection
+    {
+        return $this->place_id;
+    }
+
+    public function addPlaceId(Place $placeId): self
+    {
+        if (!$this->place_id->contains($placeId)) {
+            $this->place_id[] = $placeId;
+        }
+
+        return $this;
+    }
+
+    public function removePlaceId(Place $placeId): self
+    {
+        $this->place_id->removeElement($placeId);
 
         return $this;
     }
