@@ -61,11 +61,11 @@ class AdminController extends AbstractController
         ]);
     }
 
-    //add route to list requests
-    #[Route('/admin/requests', name: 'admin_requests')]
-    public function requests(): Response
+    //add route to list interviews
+    #[Route('/admin/interviews', name: 'admin_interviews')]
+    public function interviews(): Response
     {
-        return $this->render('admin/requests.html.twig', [
+        return $this->render('admin/interviews.html.twig', [
             'controller_name' => 'AdminController',
         ]);
     }

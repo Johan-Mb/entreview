@@ -30,14 +30,6 @@ class Media
     #[ORM\Column(type: 'string', length: 255)]
     private $tel = [];
 
-    #[ORM\OneToMany(mappedBy: 'media', targetEntity: Request::class)]
-    private $request;
-
-    public function __construct()
-    {
-        $this->request = new ArrayCollection();
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -99,36 +91,6 @@ class Media
     public function setTel(int $tel): self
     {
         $this->tel = $tel;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Request>
-     */
-    public function getRequest(): Collection
-    {
-        return $this->request;
-    }
-
-    public function addRequest(Request $request): self
-    {
-        if (!$this->request->contains($request)) {
-            $this->request[] = $request;
-            $request->setMedia($this);
-        }
-
-        return $this;
-    }
-
-    public function removeRequest(Request $request): self
-    {
-        if ($this->request->removeElement($request)) {
-            // set the owning side to null (unless already changed)
-            if ($request->getMedia() === $this) {
-                $request->setMedia(null);
-            }
-        }
 
         return $this;
     }
